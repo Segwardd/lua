@@ -1,4 +1,4 @@
-
+print('module extention made by segward, Segward#7539')
 local module = {
     objects = function(self)
         metatable = setmetatable({}, {__index = self})
