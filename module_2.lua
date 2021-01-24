@@ -31,7 +31,15 @@ local module = {
             end
         end
         self.listen = function()
-            print(unpack(self.table))
+            non_table = {}
+            for i,v in pairs(self.table) do
+                if type(v) == 'table' then
+                    print('table',unpack(v))
+                else
+                    table.insert(non_table,v)
+                end 
+             end
+             print(unpack(non_table))
         end
         return metatable
     end
