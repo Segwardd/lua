@@ -1,5 +1,9 @@
+
+
 local module = {
     BodyPosition = function(self,Body,Position,Strength)
+        local setsimulation = setsimulationradius or set_simulation_radius
+        setsimulation(1e308, 1/0)
         object = setmetatable({}, {__index = self})
         self.Status = true
         self.Body = Body
