@@ -1,3 +1,4 @@
+
 local module = {
     objects = function(self)
         metatable = setmetatable({}, {__index = self})
@@ -8,6 +9,7 @@ local module = {
         self.rem = function(arg1)
             for i,v in pairs(self.table) do
                 if type(v) == 'table' and type(arg1) == 'table' then
+                    print(table.find(self.table,v))
                     local checker = {}
                     for i in pairs(v) do
                         if v[i] == arg1[i] then
@@ -24,7 +26,7 @@ local module = {
                 else
                     local x = table.find(self.table,arg1)
                      if x then
-                        table.remove(self.table,x)
+                        table.remove(self.table)
                     end 
                 end
             end
