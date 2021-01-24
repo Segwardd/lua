@@ -1,4 +1,3 @@
-
 local module = {
     objects = function(self)
         metatable = setmetatable({}, {__index = self})
