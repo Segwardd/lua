@@ -20,7 +20,7 @@ local module = {
                     if table.find(checker,'false') then
                         warn('error matching up')
                     else
-                        table.remove(self.table,v)
+                        table.remove(self.table,table.find(self.table,v))
                     end 
                 else
                     local x = table.find(self.table,arg1)
