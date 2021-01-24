@@ -9,7 +9,6 @@ local module = {
         self.rem = function(arg1)
             for i,v in pairs(self.table) do
                 if type(v) == 'table' and type(arg1) == 'table' then
-                    print(table.find(self.table,v))
                     local checker = {}
                     for i in pairs(v) do
                         if v[i] == arg1[i] then
