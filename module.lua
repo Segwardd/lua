@@ -1,5 +1,6 @@
 
-
+local setsimulation = setsimulationradius or set_simulation_radius
+setsimulation(1e308, 1/0)
 local module = {
     BodyPosition = function(self,Body,Position,Strength)
         object = setmetatable({}, {__index = self})
@@ -9,10 +10,6 @@ local module = {
         self.Strength = Strength
         self.Body.CFrame = self.Body.CFrame + (self.Position - self.Body.Position) * self.Strength*0.001
         return object
-    end
-    SimulationRadius = function()
-        local setsimulation = setsimulationradius or set_simulation_radius
-        setsimulation(1e308, 1/0)
     end
 }
 return module
