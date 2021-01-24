@@ -1,14 +1,39 @@
-local setsimulation = setsimulationradius or set_simulation_radius
-setsimulation(1e308, 1/0)
+
 local module = {
-    BodyPosition = function(self,Body,Position,Strength)
-        object = setmetatable({}, {__index = self})
-        self.Status = true
-        self.Body = Body
-        self.Position = Position
-        self.Strength = Strength
-        self.Body.CFrame = self.Body.CFrame + (self.Position - self.Body.Position) * self.Strength*0.001
-        return object
+    objects = function(self)
+        metatable = setmetatable({}, {__index = self})
+        self.table = {}
+        self.add = function(arg1)
+            table.insert(self.table,arg1)
+        end
+        self.rem = function(arg1)
+            for i,v in pairs(self.table) do
+                if type(v) == 'table' and type(arg1) == 'table' then
+                    local checker = {}
+                    for i in pairs(v) do
+                        if v[i] == arg1[i] then
+                            table.insert(checker,'true')
+                        else
+                            table.insert(checker,'false')
+                        end
+                    end
+                    if table.find(checker,'false') then
+                        warn('error matching up')
+                    else
+                        table.remove(self.table,v)
+                    end 
+                else
+                    local x = table.find(self.table,arg1)
+                     if x then
+                        table.remove(self.table,x)
+                    end 
+                end
+            end
+        end
+        self.listen = function()
+            print(unpack(self.table))
+        end
+        return metatable
     end
 }
 return module
