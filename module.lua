@@ -2,7 +2,12 @@ local module = {}
 
 setmetatable(module,{
 	__index = function(__table,index)
-		local object = setmetatable({},{__index = self})
+		local object = setmetatable({},{__index = self,
+		    __add = function(self, value)
+		        table.insert(self, value)
+		        return self
+		    end
+		})
 		object.add = function(self,_table)
 			for i,v in ipairs(_table) do
 				self[#object+1] = v
