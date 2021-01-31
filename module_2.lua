@@ -38,7 +38,7 @@ setmetatable(module,{
             for i,Descendant in pairs(Parent) do
                 if Descendant:IsA('Humanoid') then
                     local Parent = Descendant.Parent
-                    if game.Players:FindFirstChild(x.Name) then
+                    if game.Players:FindFirstChild(Åaremt.Name) then
                     else
 			print(type(Parent))
                         table.insert(Return,Parent)
