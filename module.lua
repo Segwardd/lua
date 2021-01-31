@@ -1,4 +1,3 @@
-  
 local module = {}
 setmetatable(module,{
 	__index = function(__table,index)
@@ -39,7 +38,7 @@ setmetatable(module,{
             for i,Descendant in pairs(Parent) do
                 if Descendant:IsA('Humanoid') then
                     local Parent = Descendant.Parent
-                    if game.Players:FindFirstChild(x.Name) then
+                    if game.Players:FindFirstChild(Parent.Name) then
                     else
 			print(type(Parent))
                         table.insert(Return,Parent)
