@@ -26,7 +26,11 @@ setmetatable(module,{
 		          table.remove(self, table.find(self,v))
 		      end
 		   end
-        end
+		end
+		object.tween = function(object_,Position)
+			local time = (object_.PrimaryPart.Position - Position).magnitude/Position*1.5
+			game:GetService('TweenService'):create(object_,TweenInfo.new(time,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut),{CFrame = CFrame.new(Position)}):Play()
+		end
         object.tirc = function(condition) -- tirc standing for table index return condition (returns the index of the table, with a condition to pass index up)
             if condition then
                 local returning = object[object.index]
