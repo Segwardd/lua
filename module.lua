@@ -8,7 +8,9 @@ setmetatable(module,{
                         table.insert(self, v)
                     end
                 else
-                table.insert(self, value)
+                    if not table.find(self,value) then
+                        table.insert(self, value)
+                    end
                 end
 		        return self
 			end,
@@ -36,7 +38,7 @@ setmetatable(module,{
         object.ganp = function(Parent) -- ganp being game alive non players (returns all living instances within a table)
             local Return = {}
             for i,v in pairs(Parent) do
-                if v:FindFirstChild('Humanoid') then
+                if v:FindFirstChild('Humanoid') and v.Humanoid.Health > 0 then
                     if game.Players:FindFirstChild(v.Name) then
                     else
                         table.insert(Return,v)
@@ -57,14 +59,13 @@ setmetatable(module,{
     object.sortname = function(table,name_table)
         local x = {}
 		for i,v in pairs(name_table) do 
-			for i,v2 in pairs(table) do
+			for i2,v2 in pairs(table) do
 				if string.lower(v2.Name):find(string.lower(v)) then
-					x[#x+1] = v
+					x[#x+1] = v2
 				end
 			end 
-		
-        	end
-        	return x
+        end
+        return x
 	end
 	object.sortchild = function(table,child)
 	    local x = {}
@@ -75,13 +76,19 @@ setmetatable(module,{
         end
         return x
 	end
-        object.tirc = function(condition) -- tirc standing for table index return condition (returns the index of the table, with a condition to pass index up)
+        object.tirc = function(condition, aftermath) -- tirc standing for table index return condition (returns the index of the table, with a condition to pass index up)
             if condition then
                 local returning = object[object.index]
                 if object.index >= #object then
-                    return false
+                    object.index = 1
+                end
+                if aftermath ~= nil then
+                    if aftermath == 'remove' then
+                        table.remove(object,object.index)
+                        return object[object.index]
+                    end
                 else
-                    object.index = object.index + 1
+                object.index = object.index + 1
                 end
             end
             return object[object.index]
