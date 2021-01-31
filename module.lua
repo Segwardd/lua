@@ -54,14 +54,17 @@ setmetatable(module,{
             end
             return x
         end
-    object.sortname = function(table,name)
+    object.sortname = function(table,name_table)
         local x = {}
-		for i,v in pairs(table) do
-			if v.Name == name then
-				x[#x+1] = v
-			end
-        end
-        return x
+		for i,v in pairs(name_table) do 
+			for i,v2 in pairs(table) do
+				if string.lower(v2.Name):find(string.lower(v)) then
+					x[#x+1] = v
+				end
+			end 
+		
+        	end
+        	return x
 	end
 	object.sortchild = function(table,child)
 	    local x = {}
