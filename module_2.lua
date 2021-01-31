@@ -1,5 +1,4 @@
 local module = {}
-
 setmetatable(module,{
 	__index = function(__table,index)
 		local object = setmetatable({},{__index = self,
@@ -14,7 +13,8 @@ setmetatable(module,{
 					return self
 				end
 			end
-		})
+        })
+        object.index = 1
 		object.add = function(self,_table)
 			for i,v in ipairs(_table) do
 				self[#object+1] = v
@@ -26,7 +26,18 @@ setmetatable(module,{
 		          table.remove(self, table.find(self,v))
 		      end
 		   end
-		end
+        end
+        object.tirc = function(condition) -- tirc standing for table index return condition (returns the index of the table, with a condition to pass index up)
+            if condition then
+                local returning = object[object.index]
+                if object.index >= #object then
+                    return false
+                else
+                    object.index = object.index + 1
+                end
+            end
+            return object[object.index]
+        end
 		return object
 	end
 })
