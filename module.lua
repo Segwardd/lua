@@ -3,8 +3,14 @@ local module = {}
 setmetatable(module,{
 	__index = function(__table,index)
 		local object = setmetatable({},{__index = self,
-		    __add = function(self, value)
-		        table.insert(self, value)
+            __add = function(self, value)
+                if type(value) == 'table' then
+                    for i,v in pairs(value) do
+                        table.insert(self, v)
+                    end
+                else
+                table.insert(self, value)
+                end
 		        return self
 			end,
 			__sub = function(self, value)
@@ -27,7 +33,20 @@ setmetatable(module,{
 		          table.remove(self, table.find(self,v))
 		      end
 		   end
-		end
+        end
+        object.ganp = function(Parent)
+            local Return = {}
+            for i,Descendant in pairs(Parent) do
+                if Descendant:IsA('Humanoid') then
+                    local ganp = Descendant.Parent
+                    if game.Players:FindFirstChild(ganp.Name) then
+                    else
+                        table.insert(Return,ganp)
+                    end
+                end
+            end
+            return Return
+        end
         object.tirc = function(condition) -- tirc standing for table index return condition (returns the index of the table, with a condition to pass index up)
             if condition then
                 local returning = object[object.index]
@@ -42,5 +61,4 @@ setmetatable(module,{
 		return object
 	end
 })
-
 return module
