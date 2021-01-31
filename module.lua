@@ -46,31 +46,31 @@ setmetatable(module,{
             return Return
         end
         object.sortclass = function(table,class)
-            local Return = {}
+            local x = {}
             for i,v in pairs(table) do
                 if type(v) == class then
-                        table.insert(Return,v)
+                    x[#x+1] = v
                 end
             end
-            return Return
+            return x
         end
-	object.sortname = function(table,name)
-		local Return = {}
+    object.sortname = function(table,name)
+        local x = {}
 		for i,v in pairs(table) do
 			if v.Name == name then
-				table.insert(Return,v)
+				x[#x+1] = v
 			end
-		end
-		return Return
+        end
+        return x
 	end
 	object.sortchild = function(table,child)
-		local Return = {}
+	    local x = {}
 		for i,v in pairs(table) do
 			if v:FindFirstChild(child) then
-				table.insert(Return,v)
+				x[#x+1] = v
 			end
-		end
-		return Return
+        end
+        return x
 	end
         object.tirc = function(condition) -- tirc standing for table index return condition (returns the index of the table, with a condition to pass index up)
             if condition then
