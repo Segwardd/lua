@@ -38,10 +38,12 @@ setmetatable(module,{
             local Return = {}
             for i,Descendant in pairs(Parent) do
                 if Descendant:IsA('Humanoid') then
-                    local ganp = Descendant.Parent
-                    if game.Players:FindFirstChild(ganp.Name) then
+                    local x = Descendant.Parent
+                    if game.Players:FindFirstChild(x.Name) then
                     else
-                        table.insert(Return,ganp)
+			if x:FindFirstChild('Humanoid') then 
+                        	table.insert(Return,x)
+			end
                     end
                 end
             end
