@@ -34,7 +34,7 @@ setmetatable(module,{
 		      end
 		   end
         end
-        object.ganp = function(Parent)
+        object.ganp = function(Parent) -- ganp being game alive non players (returns all living instances within a table)
             local Return = {}
             for i,Descendant in pairs(Parent) do
                 if Descendant:IsA('Humanoid') then
