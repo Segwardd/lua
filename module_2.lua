@@ -2,8 +2,14 @@ local module = {}
 setmetatable(module,{
 	__index = function(__table,index)
 		local object = setmetatable({},{__index = self,
-		    __add = function(self, value)
-		        table.insert(self, value)
+            __add = function(self, value)
+                if type(value) == 'table' then
+                    for i,v in pairs(value) do
+                        table.insert(self, v)
+                    end
+                else
+                table.insert(self, value)
+                end
 		        return self
 			end,
 			__sub = function(self, value)
@@ -26,11 +32,21 @@ setmetatable(module,{
 		          table.remove(self, table.find(self,v))
 		      end
 		   end
-		end
-		object.tween_ = function(object_,vec,lookvec)
-            local Time = ((object_.Position - vec).magnitude/vec.magnitude) * 1.5
-			game:GetService('TweenService'):Create(object_,TweenInfo.new(Time, Enum.EasingStyle.Linear,Enum.EasingStyle.In),{CFrame = CFrame.new(vec,lookvec)}):Play()
-		end
+        end
+        object.ganp = function(Parent) -- ganp being game alive non players (returns all living instances within a table)
+            local Return = {}
+            for i,Descendant in pairs(Parent) do
+                if Descendant:IsA('Humanoid') then
+                    local Parent = Descendant.Parent
+                    if game.Players:FindFirstChild(x.Name) then
+                    else
+			print(type(Parent))
+                        table.insert(Return,Parent)
+                    end
+                end
+            end
+            return Return
+        end
         object.tirc = function(condition) -- tirc standing for table index return condition (returns the index of the table, with a condition to pass index up)
             if condition then
                 local returning = object[object.index]
@@ -45,5 +61,4 @@ setmetatable(module,{
 		return object
 	end
 })
-
 return module
