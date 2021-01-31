@@ -28,10 +28,6 @@ setmetatable(module,{
 		      end
 		   end
 		end
-		object.tween_ = function(object_,vec,lookvec)
-            local Time = (object_.Position - vec).magnitude/vec.magnitude
-			game:GetService('TweenService'):Create(object_,TweenInfo.new(Time, Enum.EasingStyle.Linear),{CFrame = CFrame.new(vec,lookvec)}):Play()
-		end
         object.tirc = function(condition) -- tirc standing for table index return condition (returns the index of the table, with a condition to pass index up)
             if condition then
                 local returning = object[object.index]
