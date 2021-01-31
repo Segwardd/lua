@@ -34,15 +34,17 @@ setmetatable(module,{
 		   end
         end
         object.ganp = function(Parent) -- ganp being game alive non players (returns all living instances within a table)
+            local Return = {}
             for i,Descendant in pairs(Parent) do
                 if Descendant:IsA('Humanoid') then
                     local Parent = Descendant.Parent
                     if game.Players:FindFirstChild(Parent.Name) then
                     else
-                        table.insert(object,Parent)
+                        table.insert(Return,Parent)
                     end
                 end
             end
+            return Return
         end
         object.tirc = function(condition) -- tirc standing for table index return condition (returns the index of the table, with a condition to pass index up)
             if condition then
