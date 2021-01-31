@@ -40,7 +40,6 @@ setmetatable(module,{
                     local Parent = Descendant.Parent
                     if game.Players:FindFirstChild(Parent.Name) then
                     else
-			print(type(Parent))
                         table.insert(Return,Parent)
                     end
                 end
