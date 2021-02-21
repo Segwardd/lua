@@ -12,12 +12,20 @@ function library:square(x)
     return x * x
 end
 
-function library:sigma(input,weight,bias)
+function library:sigma(a,b,c)
     total = 0
-    for i = 1, #input do
-        total = total + input[i] * weight[i]
+    for i = 1, #a do
+        total = total + a[i] * b[i]
     end
-    return total + bias
+    return total + c
+end
+
+function library:cost(a, b)
+    return math.pow(a - b, 2)
+end
+
+function library:slope(a, b)
+    return 2 * (a - b)
 end
 
 return library
