@@ -12,4 +12,12 @@ function library:square(x)
     return x * x
 end
 
+function library:sigma(input,weight,bias)
+    total = 0
+    for i = 1, #input do
+        total = total + input[i] * weight[i]
+    end
+    return total + bias
+end
+
 return library
