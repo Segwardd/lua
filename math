@@ -1,0 +1,15 @@
+local library = {}
+
+function library:sigmoid(x)
+    return 1 / (1 + math.exp(-x))
+end
+
+function library:sigmoid_prime(x)
+    return library:sigmoid(x) * (1 - library:sigmoid(x))
+end
+
+function library:square(x)
+    return x * x
+end
+
+return library
