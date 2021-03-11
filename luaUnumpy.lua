@@ -14,6 +14,13 @@ metatable = {
             output[i] = array[i] + value
         end
         return output
+    end,
+    __mul = function (array, value)
+        output = {}
+        for i = 1, #array do
+            output[i] = array[i] * value
+        end
+        return output
     end
 }
 
