@@ -1,6 +1,6 @@
 
 local MaxPop = 50
-local MutationRate = 0.01
+local MutationRate = 0.005
 
 function random_weight()
 	return math.random(-1000,1000)/1000
@@ -198,8 +198,7 @@ function dot(array1, array2)
 end
 
 function ann(agent)
-	
-	-- 8 inputs, xy, xy, f, b, l, r
+
 	local inputs = {
 		agent[1].Position.X,
 		agent[1].Position.Z,
@@ -233,8 +232,11 @@ function fitness(population)
 end
 
 
+local gen = 1
 
 while true do
+	
+	print(gen)
 	
 	local population = population(parentA, parentB)
 	
@@ -262,6 +264,13 @@ while true do
 	
 	for i,v in pairs(population) do
 		v[1]:Destroy()
+	end
+	
+	gen = gen + 1
+	
+	if gen >= 50 then
+		workspace.Goal.CFrame = CFrame.new(math.random(-100,100),0.5,math.random(-100,100))
+		gen = 1
 	end
 	
 end
