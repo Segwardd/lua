@@ -1,6 +1,6 @@
 
-local MaxPop = 50
-local MutationRate = 0.01
+local MaxPop = 75
+local MutationRate = 0.005
 
 function random_weight()
 	return math.random(-1000,1000)/1000
@@ -212,7 +212,7 @@ function ann(agent)
 	local hidden = dot(agent[2][1], inputs)
 	local output = dot(agent[2][2], hidden)
 	
-	agent[1].BodyVelocity.Velocity = Vector3.new(output[1],0,output[2]) * 0.5
+	agent[1].BodyVelocity.Velocity = Vector3.new(output[1],0,output[2])
 	
 	
 end
@@ -225,7 +225,7 @@ function fitness(population)
 		
 		local magnitude = (v[1].Position - workspace.Goal.Position).magnitude
 		
-		table.insert(scores, (1 / math.pow(magnitude,3) + 0.0001))
+		table.insert(scores, (1 / magnitude + 0.0001))
 		
 	end
 	
