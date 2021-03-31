@@ -225,7 +225,7 @@ function fitness(population)
 		
 		local magnitude = (v[1].Position - workspace.Goal.Position).magnitude
 		
-		table.insert(scores, (1 / magnitude + 0.0001))
+		table.insert(scores, (1 / math.pow(magnitude,3) + 0.0001))
 		
 	end
 	
