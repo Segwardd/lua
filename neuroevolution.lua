@@ -1,6 +1,6 @@
 
 local MaxPop = 50
-local MutationRate = 0.005
+local MutationRate = 0.01
 
 function random_weight()
 	return math.random(-1000,1000)/1000
@@ -8,6 +8,10 @@ end
 
 local weights_hidden_A = 
 	{
+		{random_weight(),random_weight(),random_weight(),random_weight()},
+		{random_weight(),random_weight(),random_weight(),random_weight()},
+		{random_weight(),random_weight(),random_weight(),random_weight()},
+		{random_weight(),random_weight(),random_weight(),random_weight()},
 		{random_weight(),random_weight(),random_weight(),random_weight()},
 		{random_weight(),random_weight(),random_weight(),random_weight()},
 		{random_weight(),random_weight(),random_weight(),random_weight()},
@@ -19,20 +23,38 @@ local weights_hidden_B =
 		{random_weight(),random_weight(),random_weight(),random_weight()},
 		{random_weight(),random_weight(),random_weight(),random_weight()},
 		{random_weight(),random_weight(),random_weight(),random_weight()},
+		{random_weight(),random_weight(),random_weight(),random_weight()},
+		{random_weight(),random_weight(),random_weight(),random_weight()},
+		{random_weight(),random_weight(),random_weight(),random_weight()},
+		{random_weight(),random_weight(),random_weight(),random_weight()},
 		{random_weight(),random_weight(),random_weight(),random_weight()}
 	}
 
 
 local weights_output_A = 
 	{
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()}
+		{
+			random_weight(),random_weight(),random_weight(),random_weight(),
+			random_weight(),random_weight(),random_weight(),random_weight()
+		},
+		{
+			random_weight(),random_weight(),random_weight(),random_weight(),
+			random_weight(),random_weight(),random_weight(),random_weight()
+		}
 	}
 
 local weights_output_B = 
 	{
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()}
+		{
+			random_weight(),random_weight(),random_weight(),random_weight(),
+			random_weight(),random_weight(),random_weight(),random_weight(),
+			random_weight(),random_weight(),random_weight(),random_weight()
+		},
+		{
+			random_weight(),random_weight(),random_weight(),random_weight(),
+			random_weight(),random_weight(),random_weight(),random_weight(),
+			random_weight(),random_weight(),random_weight(),random_weight()
+		}
 	}
 
 local parentA = {weights_hidden_A, weights_output_A}
@@ -210,7 +232,7 @@ function ann(agent)
 	local hidden = dot(agent[2][1], inputs)
 	local output = dot(agent[2][2], hidden)
 	
-	agent[1].BodyVelocity.Velocity = Vector3.new(output[1],0,output[2])
+	agent[1].BodyVelocity.Velocity = Vector3.new(output[1],0,output[2]) * 1.5
 	
 	
 end
@@ -223,7 +245,7 @@ function fitness(population)
 		
 		local magnitude = (v[1].Position - workspace.Goal.Position).magnitude
 		
-		table.insert(scores, (1 / magnitude * 100))
+		table.insert(scores, (1 / (magnitude * magnitude)) + 0.0001)
 		
 	end
 	
@@ -268,7 +290,7 @@ while true do
 	
 	gen = gen + 1
 	
-	if gen >= 50 then
+	if gen >= 30 then
 		workspace.Goal.CFrame = CFrame.new(math.random(-100,100),0.5,math.random(-100,100))
 		gen = 1
 	end
