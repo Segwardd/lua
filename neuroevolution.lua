@@ -1,6 +1,6 @@
 
-local MaxPop = 75
-local MutationRate = 0.005
+local MaxPop = 50
+local MutationRate = 0.01
 
 function random_weight()
 	return math.random(-1000,1000)/1000
@@ -130,7 +130,6 @@ function PoolSelectionIndex(population)
 		table.insert(pool, percentage_of_agent)
 		
 	end
-	print(unpack(pool))
 	
 	local index = 0
 	local random = math.random(0,1000)/1000
@@ -225,7 +224,7 @@ function fitness(population)
 		
 		local magnitude = (v[1].Position - workspace.Goal.Position).magnitude
 		
-		table.insert(scores, (1 / magnitude + 0.0001))
+		table.insert(scores, (1 / magnitude * 100))
 		
 	end
 	
