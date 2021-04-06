@@ -1,299 +1,98 @@
+local NeuralNetwork = {}
 
-local MaxPop = 50
-local MutationRate = 0.01
-
-function random_weight()
-	return math.random(-1000,1000)/1000
+function NeuralNetwork.Random(range)
+    return math.random(-range, range)/1000
 end
 
-local weights_hidden_A = 
-	{
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()}
-	}
+function NeuralNetwork.Sigmoid(x)
+    return 1 / (1 + math.exp(-x))
+end
 
-local weights_hidden_B = 
-	{
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()},
-		{random_weight(),random_weight(),random_weight(),random_weight()}
-	}
+function NeuralNetwork.KE(mass, speed)
+    return (1/2*mass) * math.pow(speed,2)
+end
 
+function NeuralNetwork.Dot(A, B)
+    local out1 = {}
+	for i,row in pairs(A) do 
+		local out2 = 0
+		for i2 in pairs(row) do
+			out2 = out2 + row[i2] * B[i2] 
+		end
+		table.insert(out1, out2)
+	end
+	return out1
+end
 
-local weights_output_A = 
-	{
-		{
-			random_weight(),random_weight(),random_weight(),random_weight(),
-			random_weight(),random_weight(),random_weight(),random_weight()
-		},
-		{
-			random_weight(),random_weight(),random_weight(),random_weight(),
-			random_weight(),random_weight(),random_weight(),random_weight()
-		}
-	}
-
-local weights_output_B = 
-	{
-		{
-			random_weight(),random_weight(),random_weight(),random_weight(),
-			random_weight(),random_weight(),random_weight(),random_weight(),
-			random_weight(),random_weight(),random_weight(),random_weight()
-		},
-		{
-			random_weight(),random_weight(),random_weight(),random_weight(),
-			random_weight(),random_weight(),random_weight(),random_weight(),
-			random_weight(),random_weight(),random_weight(),random_weight()
-		}
-	}
-
-local parentA = {weights_hidden_A, weights_output_A}
-local parentB = {weights_hidden_B, weights_output_B}
-
-
-function crossover(parentA, parentB)
-	
+function NeuralNetwork.Crossover(parentA, parentB)
 	local offspring = {}
-	
 	for i,v in pairs(parentA) do
-		
 		local weights = {}
-		
 		for i2,v2 in pairs(v) do
-			
 			local connections = {}
 			local Crossover_Point = math.random(1,#v2)
-			
 			for i3,v3 in pairs(v2) do
-				
 				if i3 < Crossover_Point then
 					table.insert(connections, parentA[i][i2][i3])
 				else
 					table.insert(connections, parentB[i][i2][i3])
 				end
-				
 			end
-			
 			table.insert(weights, connections)
-			
 		end
-		
 		table.insert(offspring, weights)
-		
 	end
-	
 	return offspring
-	
 end
 
-function mutation(DNA)
-	
-	local mutated_DNA = {}
-	
-	for i,v in pairs(DNA) do 
-		
-		local weights = {}
-		
+function NeuralNetwork.Mutation(Weights, Rate)
+	local Genes = {}
+	for i,v in pairs(Weights) do
+		local Gene = {}
 		for i2,v2 in pairs(v) do
-			
-			local connections = {}
-			
-			for i3,v3 in pairs(v2) do
-				
-				local mutation_attemt = math.random(0,1000)/1000
-				
-				local connection = v3
-				
-				if mutation_attemt < MutationRate then
-					
-					connection = random_weight()
-					
-				end
-				
-				table.insert(connections, connection)
-				
+			if math.random(0,1000)/1000 < Rate then
+				table.insert(Gene, NeuralNetwork.random(2000))
+			else
+				table.insert(Gene, v2)
 			end
-			
-			table.insert(weights, connections)
-			
 		end
-		
-		table.insert(mutated_DNA, weights)
-		
+		table.insert(Genes, Gene)
 	end
-	
-	return mutated_DNA
-	
+	return Genes
 end
 
-function PoolSelectionIndex(population)
-	
-	local pool = {}
-	local sum = 0
-	
-	for i,v in pairs(population) do
-		sum = sum + v
-	end
-	
-	for i,v in pairs(population) do
-		
-		local percentage_of_agent = v / sum
-		
-		table.insert(pool, percentage_of_agent)
-		
-	end
-	
-	local index = 0
-	local random = math.random(0,1000)/1000
-	
-	while random > 0 do
-		index = index + 1
-		random = random - pool[index]
-	end
-	
-	return index
-	
-end
-
-function DNA(parentA, parentB)
-	
-	local offspring = crossover(parentA, parentB)
-	local mutationattemt = mutation(offspring)
-	
-	return mutationattemt
-	
-end
-
-function population(parentA, parentB)
-	
-	local population = {}
-	
-	for i = 1, MaxPop do
-		
-		local DNA = DNA(parentA, parentB)
-		local agent = Instance.new('Part')
-		agent.CFrame = CFrame.new(workspace.Start.Position)
-		agent.Parent = workspace
-		agent.CanCollide = false
-		
-		local Bodyvelocity = Instance.new('BodyVelocity', agent)
-		Bodyvelocity.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
-		
-		table.insert(population, {agent, DNA})
-		
-	end
-	
-	return population
-	
-end
-
-function dot(array1, array2)
-	
-	local output = {}
-	
-	for i,row in pairs(array1) do 
-		
-		local output2 = 0
-		
-		for i2 in pairs(row) do
-			
-			output2 = output2 + row[i2] * array2[i2] 
-			
+function NeuralNetwork.NeuralNetwork(IN, HN, ON)
+	local HW = {}
+	local OW = {}
+	for i = 1, HN do
+		local N = {}
+		for i2 = 1, IN do
+			table.insert(N, NeuralNetwork.random(1000))
 		end
-		
-		table.insert(output, output2)
-		
+		table.insert(HW,N)
 	end
-	
-	return output
-	
-end
-
-function ann(agent)
-
-	local inputs = {
-		agent[1].Position.X,
-		agent[1].Position.Z,
-		workspace.Goal.Position.X,
-		workspace.Goal.Position.Z
-		
-	}
-	
-	local hidden = dot(agent[2][1], inputs)
-	local output = dot(agent[2][2], hidden)
-	
-	agent[1].BodyVelocity.Velocity = Vector3.new(output[1],0,output[2]) * 1.5
-	
-	
-end
-
-function fitness(population)
-	
-	local scores = {}
-	
-	for i,v in pairs(population) do
-		
-		local magnitude = (v[1].Position - workspace.Goal.Position).magnitude
-		
-		table.insert(scores, (1 / (magnitude * magnitude)) + 0.0001)
-		
-	end
-	
-	return scores
-	
-end
-
-
-local gen = 1
-
-while true do
-	
-	print(gen)
-	
-	local population = population(parentA, parentB)
-	
-	local round = 0
-
-	repeat wait()
-
-		for i,v in pairs(population) do
-
-			ann(v)
-
+	for i = 1, ON do
+		local N = {}
+		for i2 = 1, HN do
+			table.insert(N, NeuralNetwork.random(1000))
 		end
-
-		round = round + 1
-
-	until round >= 100
-	
-	local scores = fitness(population)
-	
-	indexA = PoolSelectionIndex(scores)
-	indexB = PoolSelectionIndex(scores)
-	
-	parentA = population[indexA][2]
-	parentB = population[indexB][2]
-	
-	for i,v in pairs(population) do
-		v[1]:Destroy()
+		table.insert(OW,N)
 	end
-	
-	gen = gen + 1
-	
-	if gen >= 30 then
-		workspace.Goal.CFrame = CFrame.new(math.random(-100,100),0.5,math.random(-100,100))
-		gen = 1
-	end
-	
+	return {HW, OW}
 end
 
+function NeuralNetwork.ANN(A, B)
+	return NeuralNetwork.Dot(B, A)
+end
+
+function NeuralNetwork.InputOutput(A, B)
+    local layer = NeuralNetwork.ANN(A, B[1])
+    for i,v in pairs(B) do
+        if i ~= 1 then
+            layer = NeuralNetwork.ANN(layer, v)
+        end
+    end
+    return layer
+end
+
+return NeuralNetwork
