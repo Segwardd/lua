@@ -1,19 +1,19 @@
 local NeuralNetwork = {}
 
 function NeuralNetwork.Random(range)
-    return math.random(-range, range)/1000
+	return math.random(-range, range)/1000
 end
 
 function NeuralNetwork.Sigmoid(x)
-    return 1 / (1 + math.exp(-x))
+	return 1 / (1 + math.exp(-x))
 end
 
 function NeuralNetwork.KE(mass, speed)
-    return (1/2*mass) * math.pow(speed,2)
+	return (1/2*mass) * math.pow(speed,2)
 end
 
 function NeuralNetwork.Dot(A, B)
-    local out1 = {}
+	local out1 = {}
 	for i,row in pairs(A) do 
 		local out2 = 0
 		for i2 in pairs(row) do
@@ -61,24 +61,29 @@ function NeuralNetwork.Mutation(Weights, Rate)
 	return Genes
 end
 
-function NeuralNetwork.NeuralNetwork(IN, HN, ON)
-	local HW = {}
-	local OW = {}
-	for i = 1, HN do
-		local N = {}
-		for i2 = 1, IN do
-			table.insert(N, NeuralNetwork.random(1000))
+function NeuralNetwork.NeuralNetwork(IN, HiddenLayers, HiddenNodes, ON)
+	local Network = {}
+	for i = 1, HiddenLayers do
+		local Layer = {}
+		for i2 = 1,  HiddenNodes do
+			local Node = {}
+			for i3 = 1, IN do
+				table.insert(Node, NeuralNetwork.Random(2000))
+			end
+			table.insert(Layer, Node)
 		end
-		table.insert(HW,N)
+		table.insert(Network, Layer)
 	end
+	local output = {}
 	for i = 1, ON do
-		local N = {}
-		for i2 = 1, HN do
-			table.insert(N, NeuralNetwork.random(1000))
+		local Node = {}
+		for i2 = 1, HiddenNodes do
+			table.insert(Node, NeuralNetwork.Random(2000))
 		end
-		table.insert(OW,N)
+		table.insert(output, Node)
 	end
-	return {HW, OW}
+	table.insert(Network, output)
+	return Network
 end
 
 function NeuralNetwork.ANN(A, B)
@@ -86,13 +91,13 @@ function NeuralNetwork.ANN(A, B)
 end
 
 function NeuralNetwork.InputOutput(A, B)
-    local layer = NeuralNetwork.ANN(A, B[1])
-    for i,v in pairs(B) do
-        if i ~= 1 then
-            layer = NeuralNetwork.ANN(layer, v)
-        end
-    end
-    return layer
+	local layer = NeuralNetwork.ANN(A, B[1])
+	for i,v in pairs(B) do
+		if i ~= 1 then
+			layer = NeuralNetwork.ANN(layer, v)
+		end
+	end
+	return layer
 end
 
 return NeuralNetwork
